@@ -1,0 +1,98 @@
+<?php
+include('../session.php');
+include('../../connection.php');
+include('../common/admin-header.php');
+include('../common/admin-footer.php');
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>WINT ZOO</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../asset/css/all.min.css">
+  <link rel="stylesheet" href="../../asset/css/bootstrap.min.css">
+  <script src="../../asset/js/bootstrap.min.js"></script>
+  <script src="../../asset/js/jquery.slim.min.js"></script>
+  <script src="../../asset/js/popper.min.js"></script>
+  <style>
+    .admin-sidebar {
+        background-color: #b6d9de;
+        margin-bottom: 5px;
+        text-align: center;
+        height: 100%;
+        width: 100%;
+    }
+    .cate-table {
+        width: 95%;
+        text-align: center;
+        margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body> 
+    <div class="row">
+        <div class="col-sm-3">
+            <ul class="navbar-nav">
+                <li class="nav-item admin-sidebar">
+                    <a class="nav-link" href="../user/view.php">User</a>
+                </li>
+                <li class="nav-item admin-sidebar">
+                    <a class="nav-link" href="../menu/view.php">Menu</a>
+                </li>
+                <li class="nav-item admin-sidebar">
+                    <a class="nav-link" href=".view.php">Category</a>
+                </li>
+                <li class="nav-item admin-sidebar">
+                    <a class="nav-link" href="#">Content</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-sm-9 cate-view">
+            <button class="btn"><a href="./create.php"> ADD PRODUCT</a></button>
+            <form method="get" action="create.php">
+                
+                <table class="table table-hover cate-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Category Name</th>
+                            <th>User Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            $conn = conn_db();
+                            if (!$conn) {
+                                exit ("Fail to connection Database! ". mysqli_connect_error($conn));
+                            }
+
+                            $sql = "SELECT * FROM category,users WHERE parent_id != 0";
+                            //mysqli_set_charset($conn, "utf8");
+                            $result = mysqli_query($conn, $sql);
+                            if (mysqli_num_rows(($result)) > 0) {
+                                $i = 1;
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                ?>
+
+                                <tr>
+                                    <td><?php echo $i++  ?></td>
+                                    <td><?= $row['cate_name'] ?></td>
+                                    <td><?= $row['username'] ?></td>
+                                    <td></td>
+                                </tr>
+
+                                <?php
+                                }
+                            }
+                            mysqli_close($conn);
+                        ?>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        
+</body>
+</html>
