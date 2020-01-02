@@ -46,7 +46,10 @@ include('../common/admin-footer.php');
                         <a class="nav-link" href="../category/dashboard.php">Category</a>
                     </li>
                     <li class="nav-item admin-sidebar">
-                        <a class="nav-link" href="#">Content</a>
+                        <a class="nav-link" href="../../admin/page/dashboard.php">Page</a>
+                    </li>
+                    <li class="nav-item admin-sidebar">
+                        <a class="nav-link" href="../../admin/post/dashboard.php">Post</a>
                     </li>
                 </ul>
             </div>
@@ -69,7 +72,7 @@ include('../common/admin-footer.php');
                                 exit ("Fail to connection Database! ". mysqli_connect_error($conn));
                             }
 
-                            $sql = "SELECT * FROM users";
+                            $sql = "SELECT * FROM users WHERE status = 1";
                             //mysqli_set_charset($conn, "utf8");
                             $result = mysqli_query($conn, $sql);
                             if (mysqli_num_rows(($result)) > 0) {

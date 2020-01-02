@@ -89,7 +89,10 @@
                     <a class="nav-link" href="dashboard.php">Category</a>
                 </li>
                 <li class="nav-item admin-sidebar">
-                    <a class="nav-link" href="#">Content</a>
+                    <a class="nav-link" href="../../admin/page/dashboard.php">Page</a>
+                </li>
+                <li class="nav-item admin-sidebar">
+                    <a class="nav-link" href="../../admin/post/dashboard.php">Post</a>
                 </li>
             </ul>
         </div>
@@ -105,8 +108,6 @@
                     <input type="text" name="categoryName" value="<?=$row['cate_name']?>" required autofocus>
                 </div>
                     <button class="btn btn-success" type="submit">Submit</button>
-                <div class="form-group">
-                </div>
             </form>
         </div>
         

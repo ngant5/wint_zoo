@@ -106,7 +106,10 @@
                     <a class="nav-link" href="dashboard.php">Category</a>
                 </li>
                 <li class="nav-item admin-sidebar">
-                    <a class="nav-link" href="#">Content</a>
+                    <a class="nav-link" href="../../admin/page/dashboard.php">Page</a>
+                </li>
+                <li class="nav-item admin-sidebar">
+                    <a class="nav-link" href="../../admin/post/dashboard.php">Post</a>
                 </li>
             </ul>
         </div>

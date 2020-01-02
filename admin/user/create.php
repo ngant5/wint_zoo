@@ -14,13 +14,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["name"]) && !empty($_POST["name"])) {
         $name = $_POST["name"];
     } else {
-        $nameErr = "Name is required";
+        $nameErr = "Username is required";
     }
 
     if (isset($_POST["pass"]) && !empty($_POST["pass"])) {
         $pass = md5($_POST["pass"]);
     } else {
-        $passErr = "User is required";
+        $passErr = "Password is required";
     }
 
     if (isset($_POST["status"]) && in_array($_POST["status"], [1,0])) {
@@ -91,7 +91,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <a class="nav-link" href="../category/dashboard.php">Category</a>
                     </li>
                     <li class="nav-item admin-sidebar">
-                        <a class="nav-link" href="#">Content</a>
+                        <a class="nav-link" href="../../admin/page/dashboard.php">Page</a>
+                    </li>
+                    <li class="nav-item admin-sidebar">
+                        <a class="nav-link" href="../../admin/post/dashboard.php">Post</a>
                     </li>
                 </ul>
             </div>
@@ -103,24 +106,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <table>
                         <tr>
                             <td>User name </td>
-                            <td><input type="text" name="name" value="<?=$name ?>"><span><?=$nameErr ?></span></td>
+                            <td><input type="text" name="name" value="<?=$name ?>" required><span><?=$nameErr ?></span></td>
                         </tr>
                         <tr>
                             <td>Password </td>
-                            <td><input type="text" name="pass" value="<?=$pass ?>"><span><?=$passErr ?></span></td>
+                            <td><input type="password" name="pass" value="<?=$pass ?>" required><span><?=$passErr ?></span></td>
                         </tr>
                         
                         <tr>
                             <td>Status:</td>
                             <td>
-                                <select name="status" id="">
-                                    <option value="1" <?=$status == 1 ? "selected" : "" ?> >Active</option>
+                                <select name="status" id="" required>
                                     <option value="0" <?=$status == 0 ? "selected" : "" ?> >Deactive</option>
+                                    <option value="1" <?=$status == 1 ? "selected" : "" ?> >Active</option>
                                 </select><span><?=$statusErr?></span>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2"><input type="submit" value="SUBMIT "></td>
+                            <td colspan="2"><button class="btn btn-success" type="submit">Submit</button>
                         </tr>
                     </table>
             </form>
