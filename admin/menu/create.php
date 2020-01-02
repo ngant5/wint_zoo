@@ -1,45 +1,41 @@
 <?php
-session_start();
-include('../session.php');
-include('../../connection.php');
-include('../common/admin-header.php');
-include('../common/admin-footer.php');
-$conn = conn_db();
-    if (!$conn) {
-        exit ("Fail to connection Database! ". mysqli_connect_error($conn));
-    }
-    $query = "SELECT * FROM category WHERE parent_id = 0";
-    $result = mysqli_query($conn, $query);
-    $parentErr = $cateNameErr = "";
-    $parentId = $categoryName = "";
-    $sql_msg = "";
+    session_start();
+    include('../session.php');
+    include('../../connection.php');
+    include('../common/admin-header.php');
+    include('../common/admin-footer.php');
+    $conn = conn_db();
+    $cateNameErr = $categoryName = "";
+    $parentId = 0;
     $user_id = $_SESSION['user']["id"];
+    $sql_msg = "";
+    
+    
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (isset($_POST["id"]) && !empty($_POST["id"])) {
-            $parentId = $_POST["id"];
-        } else {
-            $parentErr = "Main Category is required";
-        }
         if (isset($_POST["categoryName"]) && !empty($_POST["categoryName"])) {
             $categoryName = $_POST["categoryName"];
         } else {
             $cateNameErr = "Category Name is required";
         }
-        if (empty($parentErr) && empty($cateNameErr)) {
-            $conn = conn_db();
+    
+        if (empty($cateNameErr)) {
             $sql = "INSERT INTO category (cate_name, parent_id, user)
             VALUES ('{$categoryName}', '{$parentId}', '{$user_id}')";
             if (mysqli_query($conn, $sql)) {
                 $last_id = mysqli_insert_id($conn);
-                $sql_msg = "Add successed <a href='view.php/?id={$last_id}' target='_blank' >New category</a>";
+                $sql_msg = "Add successed <a href='view.php/?id={$last_id}' target='_blank' >New Menu</a>";
             } else {
                 $sql_msg = "Add Fail";
             }
-            $categoryName = $id = "";
+            
+            $categoryName = "";
             mysqli_close($conn);
         }
     }
+
+    
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -73,13 +69,13 @@ $conn = conn_db();
         <div class="col-sm-3">
             <ul class="navbar-nav">
                 <li class="nav-item admin-sidebar">
-                    <a class="nav-link" href="../user/view.php">User</a>
+                    <a class="nav-link" href="../user/dashboard.php">User</a>
                 </li>
                 <li class="nav-item admin-sidebar">
-                    <a class="nav-link" href="../menu/view.php">Menu</a>
+                    <a class="nav-link" href="dashboard.php">Menu</a>
                 </li>
                 <li class="nav-item admin-sidebar">
-                    <a class="nav-link" href="dashboard.php">Category</a>
+                    <a class="nav-link" href="../category/dashboard.php">Category</a>
                 </li>
                 <li class="nav-item admin-sidebar">
                     <a class="nav-link" href="#">Content</a>
@@ -91,21 +87,7 @@ $conn = conn_db();
             <button class="btn"><a href="./view.php">&#8810; BACK</a></button>
             <form method="post" action="create.php">
                 <div class="form-group">
-                <label>Main Category:</label>
-                    <select name="id" required>
-                        <?php
-                         echo "<option value='$id'>Select main category</option>";
-                            while($row = mysqli_fetch_assoc($result)) {
-                                $id = $row['id'];
-                                $parent_name = $row['cate_name'];
-                                echo "<option value='$id'>$parent_name</option>";
-                            }
-                            mysqli_close($conn);
-                        ?>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Category Name:</label>
+                    <label>Menu Name:</label>
                     <input type="text" name="categoryName" required autofocus>
                 </div>
                     <button class="btn btn-success" type="submit">Submit</button>

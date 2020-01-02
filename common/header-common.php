@@ -46,11 +46,6 @@ $link_home = "http://localhost/wint_zoo/client/about.php";
                     </div>
                 </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="http://localhost/wint_zoo/admin/dashboard.php"><span class="glyphicon glyphicon-log-in"></span> Admin</a>
-                </li>
-            </ul>
 
         </div>
     </nav>

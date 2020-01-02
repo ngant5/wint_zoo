@@ -62,8 +62,9 @@ if(isset($_GET["id"]) && $_GET["id"] > 0) {
         </div>
 
         <div class="col-sm-9 cate-view">
+            <h1 class="text-center">CATEGORY</h1>
             <button class="btn"><a href="./view.php">&#8810; BACK</a></button>
-            <button class="btn"><a href="./create.php"> ADD PRODUCT</a></button>
+            <button class="btn"><a href="./create.php"> ADD </a></button>
             <form method="get" action="create.php">
                 
                 <table class="table table-hover cate-table table-bordered">

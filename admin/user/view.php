@@ -4,18 +4,14 @@ include('../session.php');
 include('../../connection.php');
 include('../common/admin-header.php');
 include('../common/admin-footer.php');
-
-$conn = conn_db();
-$sql = "SELECT * FROM category inner join users on category.user = users.user_id WHERE parent_id != 0";
-//mysqli_set_charset($conn, "utf8");
-$result = mysqli_query($conn, $sql);
-if (mysqli_num_rows($result) > 0) {
-    $i = 1;
-    while ($row = mysqli_fetch_assoc($result)) {
-        $_data[] = $row;
-        }
-    }
-    mysqli_close($conn);
+if(isset($_GET["id"]) && $_GET["id"] > 0) {
+    $conn = conn_db();
+    $id = $_GET["id"];
+    $sql = "SELECT * FROM users WHERE user_id = $id";
+    //mysqli_set_charset($conn, "utf8");
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($result);
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -64,38 +60,38 @@ if (mysqli_num_rows($result) > 0) {
         </div>
 
         <div class="col-sm-9 cate-view">
-            <h1 class="text-center">CATEGORY</h1>
+            <h1 class="text-center">USER</h1>
+            <button class="btn"><a href="./view.php">&#8810; BACK</a></button>
             <button class="btn"><a href="./create.php"> ADD </a></button>
             <form method="get" action="create.php">
                 
                 <table class="table table-hover cate-table table-bordered">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Category Name</th>
                             <th>User Name</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
+                        <tr>
+                            <td><?= $row['username'] ?></td>
+                            <td>
+                                <a href="<?="./view.php?id={$row['user_id']}" ?>" target="_blank"> View </a> ||
+                                <a href="<?="./edit.php?id={$row['user_id']}" ?>" target="_blank"> Edit </a> ||
+                                <a href="<?="./delete.php?id={$row['user_id']}" ?>" target="_blank"> Delete </a>
+                            </td>
+                        </tr>
                         <?php
-                        $i = 1;
-                        foreach ($_data as $key => $value) : ?>
-                            <tr>
-                                <td><?php echo $i++  ?></td>
-                                <td><?= $value['cate_name'] ?></td>
-                                <td><?= $value['username'] ?></td>
-                                <td>
-                                    <a href="<?="view.php?id={$value['id']}" ?>" target="_blank"> View </a> ||
-                                    <a href="<?="./edit.php?id={$value['id']}" ?>" target="_blank"> Edit </a> ||
-                                    <a href="<?="delete.php?id={$value['id']}" ?>" target="_blank"> Delete </a>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
+                                
+                            } else {
+                                header("Location: http://localhost/wint_zoo/admin/user/dashboard.php");
+                            }
+                            mysqli_close($conn);
+                        ?>
                     </tbody>
                 </table>
             </form>
         </div>
-        
+    </div>
 </body>
 </html>
