@@ -1,11 +1,8 @@
 <?php
 session_start();
-// if (isset($_SESSION['user']) && $_SESSION['user']){
-//     header("Location:http://localhost/wint_zoo/admin/dashboard.php");
-// }
+
 require "../connection.php";
 $conn = conn_db();
-$row = "";
 $user = $pass = $msg = "";
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -15,24 +12,25 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $sql = "SELECT * FROM users WHERE username = '{$user}' ";
     $result = mysqli_query($conn, $sql);
 
-    if (mysqli_num_rows($result) == 1) {
+    if (mysqli_num_rows($result)) {
         $row = mysqli_fetch_assoc($result);
         if ($row['password'] == md5($pass)) {
             $session_user = [
-                'id' => $row['id'],
+                'id' => $row['user_id'],
                 'username' => $row['username'],
-                'role' => $row['role_id']
+                'role' => $row['role_id'],
+                'status' => $row['status']
             ];
             $_SESSION['user'] = $session_user;
-            var_dump($_SESSION['user']);
             header("Location: http://localhost/wint_zoo/admin/dashboard.php");
+        } else {
+            $msg = "The username or password is incorrect";
         }
     } else {
         $msg = "The username or password is incorrect";
     }
     mysqli_close($conn);
 }
-
 
 ?>
 <!DOCTYPE html>
@@ -71,23 +69,21 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     </div>
 
     <div class="container">
-    <form method="post">
-        <h1>Login</h1> 
-            <div class="text-danger"><?=$msg ?></div>
-            <div class="form-group">
-                <label for="txtTenTK">User Name</label>
-                <input id="txtTenTK" class="form-control" type="text" name="user">
-            </div>
-            <div class="form-group">
-                <label for="txtMK">Password</label>
-                <input id="txtMK" class="form-control" type="password" name="pass">
-            </div>
-            
-            <button class="btn btn-success" type="submit">Subbmit</button>
-    </form>
+        <form method="post">
+            <h1>Login</h1> 
+                <div class="text-danger"><?=$msg; ?></div>
+                <div class="form-group">
+                    <label for="txtTenTK">User Name</label>
+                    <input id="txtTenTK" class="form-control" type="text" name="user">
+                </div>
+                <div class="form-group">
+                    <label for="txtMK">Password</label>
+                    <input id="txtMK" class="form-control" type="password" name="pass">
+                </div>
+                
+                <button class="btn btn-success" type="submit">Subbmit</button>
+        </form>
     </div>
-    
-
     <div class="footer admin-footer">
         <div class="text-muted footer-copyright text-center py-3">© 2019 Copyright:
             <a href="http://localhost/wint_zoo/">wintzoo.com.</a>

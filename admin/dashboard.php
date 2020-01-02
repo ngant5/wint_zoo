@@ -1,8 +1,9 @@
 <?php
     session_start();
-    // include('./session.php');
+    include('./session.php');
     include('./common/admin-header.php');
     include('./common/admin-footer.php');
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,10 +32,13 @@
         <div class="col-sm-3">
             <ul class="navbar-nav">
                 <li class="nav-item admin-sidebar">
-                    <a class="nav-link" href="../admin/user/view.php">User</a>
+                    <a class="nav-link" href="./user/dashboard.php">User</a>
                 </li>
                 <li class="nav-item admin-sidebar">
-                    <a class="nav-link" href="../admin/category/view.php">Category</a>
+                    <a class="nav-link" href="./menu/dashboard.php">Menu</a>
+                </li>
+                <li class="nav-item admin-sidebar">
+                    <a class="nav-link" href="./category/dashboard.php">Category</a>
                 </li>
                 <li class="nav-item admin-sidebar">
                     <a class="nav-link" href="#">Content</a>

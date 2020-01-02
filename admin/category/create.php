@@ -1,46 +1,56 @@
 <?php
+session_start();
 include('../session.php');
 include('../../connection.php');
 include('../common/admin-header.php');
 include('../common/admin-footer.php');
-
-$sql_msg = "";
-$nameErr = $parentErr = "";
-$name = $parentid = "";
-$user = $_SESSION['user']["username"];
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    if (isset($_POST["name"]) && !empty($_POST["name"])) {
-        $name = $_POST["name"];
-    } else {
-        $nameErr = "Name is required";
+$conn = conn_db();
+    if (!$conn) {
+        exit ("Fail to connection Database! ". mysqli_connect_error($conn));
     }
+    $query = "SELECT * FROM category WHERE parent_id = 0";
+    $result = mysqli_query($conn, $query);
 
-    if (isset($_POST["parentid"]) && !empty($_POST["parentid"])) {
-        $parentid = $_POST["parentid"];
-    } else {
-        $parentidErr = "Parent category is required";
-    }
+    $parentErr = $cateNameErr = "";
+    $parentId = $categoryName = "";
+    $sql_msg = "";
+    $user_id = $_SESSION['user']["id"];
+    
 
-    if (empty($nameErr) && empty($parentErr)) {
-        require "./connection.php";
-        $conn = conn_db();
-        $sql = "INSERT INTO category (cate_name, parent_id, user)
-        VALUES ('{$name}', {$parent}, '{$user}')";
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        if (mysqli_query($conn, $sql)) {
-            $last_id = mysqli_insert_id($conn);
-            $sql_msg = "Add successed <a href='view.php?id={$last_id}' target='_blank' >New item</a>";
+        if (isset($_POST["id"]) && !empty($_POST["id"])) {
+            $parentId = $_POST["id"];
         } else {
-            $sql_err = "Add Fail";
+            $parentErr = "Main Category is required";
         }
 
-        $name = $parentid = "";
-        mysqli_close($conn);
+        if (isset($_POST["categoryName"]) && !empty($_POST["categoryName"])) {
+            $categoryName = $_POST["categoryName"];
+        } else {
+            $cateNameErr = "Category Name is required";
+        }
+    
+        if (empty($parentErr) && empty($cateNameErr)) {
+            $conn = conn_db();
+            $sql = "INSERT INTO category (cate_name, parent_id, user)
+            VALUES ('{$categoryName}', '{$parentId}', '{$user_id}')";
+    
+            if (mysqli_query($conn, $sql)) {
+                $last_id = mysqli_insert_id($conn);
+                $sql_msg = "Add successed <a href='view.php/?id={$last_id}' target='_blank' >New category</a>";
+            } else {
+                $sql_msg = "Add Fail";
+            }
+            
+            $categoryName = $id = "";
+            mysqli_close($conn);
+        }
     }
-}
 
+    
+
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -70,6 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body> 
+<?=$sql_msg ?>
     <div class="row">
         <div class="col-sm-3">
             <ul class="navbar-nav">
@@ -80,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <a class="nav-link" href="../menu/view.php">Menu</a>
                 </li>
                 <li class="nav-item admin-sidebar">
-                    <a class="nav-link" href=".view.php">Category</a>
+                    <a class="nav-link" href="dashboard.php">Category</a>
                 </li>
                 <li class="nav-item admin-sidebar">
                     <a class="nav-link" href="#">Content</a>
@@ -88,25 +99,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </ul>
         </div>
 
-        <div class="col-sm-9">
-            <form method="POST" action="create.php">
-                <table class="table">
-                    <tr>
-                        <td>Category Name:</td>
-                        <td><input type="text" name="name" value="<?=$name ?>"><span><?=$nameErr ?></span></td>
-                    </tr>
-                    <tr>
-                        <td>Parent Category:</td>
-                        <td>
-                            <select name="parentid" id="">
-                                <option value="1" <?=$parentid == 1 ? "selected" : "" ?> >Parent Category 1 </option>
-                                <option value="0" <?=$parentid == 0 ? "selected" : "" ?> >Parent Category 2 </option>
-                            </select>
-                        </td>
-                    </tr>
-                </table>
+        <div class="col-sm-9 cate-view">
+            <button class="btn"><a href="./view.php">&#8810; BACK</a></button>
+            <form method="post" action="create.php">
+                <div class="form-group">
+                <label>Main Category:</label>
+                    <select name="id" required>
+                        <?php
+                         echo "<option value='$id'>Select main category</option>";
+                            while($row = mysqli_fetch_assoc($result)) {
+                                $id = $row['id'];
+                                $parent_name = $row['cate_name'];
+                                echo "<option value='$id'>$parent_name</option>";
+                            }
+                            mysqli_close($conn);
+                        ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Category Name:</label>
+                    <input type="text" name="categoryName" required autofocus>
+                </div>
+                    <button class="btn btn-success" type="submit">Subbmit</button>
+                <div class="form-group">
+                </div>
             </form>
         </div>
-    </body>
-
-<html>
+        
+</body>
+</html>

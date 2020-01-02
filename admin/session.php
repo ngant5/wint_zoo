@@ -1,8 +1,7 @@
 <?php
-session_start();
 
-if(empty($_SESSION['user']) || !in_array($_SESSION['user']["role"], [1,2])) {
-    header("Location: http://localhost/wint_zoo/admin");
+if(empty($_SESSION['user'])) {
+    header("Location: http://localhost/wint_zoo/admin/login.php");
 } 
 ?>
 
