@@ -1,7 +1,7 @@
 
 <?php
 session_start();
-include('../../connection.php');
+include('../session.php');
 include('../common/admin-header.php');
 include('../common/admin-footer.php');
 ?>

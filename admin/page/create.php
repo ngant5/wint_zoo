@@ -106,20 +106,18 @@
             <div class="container">
                 <form method="post" action="./create.php" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label>Menu</label>
-                        <div>
-                            <select name="category" required>
-                                <?php
-                                echo "<option value='$id'>Select main category</option>";
-                                    while($row = mysqli_fetch_assoc($result)) {
-                                        $id = $row['id'];
-                                        $parent_name = $row['cate_name'];
-                                        echo "<option value='$id'>$parent_name</option>";
-                                    }
-                                    mysqli_close($conn);
-                                ?>
-                            </select>
-                        </div>
+                        <label>Main Category:</label>
+                        <select name="category" required>
+                            <?php
+                            echo "<option value='$id'>Select main category</option>";
+                                while($row = mysqli_fetch_assoc($result)) {
+                                    $id = $row['id'];
+                                    $parent_name = $row['cate_name'];
+                                    echo "<option value='$id'>$parent_name</option>";
+                                }
+                                mysqli_close($conn);
+                            ?>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="my-input">Title</label>
