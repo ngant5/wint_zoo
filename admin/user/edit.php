@@ -4,21 +4,16 @@ include('../../connection.php');
 include('../common/admin-header.php');
 include('../common/admin-footer.php');
 $conn = conn_db();
-
 $sql_msg = "";
 $nameErr  = $passErr = $statusErr = "";
 $name  = $pass = $status = "";
 $role = 2;
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $id = $_GET['id'];
-
     $sql = "SELECT * FROM users WHERE user_id = $id";
     $result = mysqli_query($conn, $sql);
-
     if (mysqli_num_rows($result) == 1) {
         $row = mysqli_fetch_assoc($result);
-
-        
         } else {
             echo "a";
             // header("Location: http://localhost/wint_zoo/admin/user/dashboard.php");
@@ -30,45 +25,32 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
     if (isset($_POST["name"]) && !empty($_POST["name"])) {
         $name = $_POST["name"];
     } else {
         $nameErr = "Username is required";
     }
-
     if (isset($_POST["pass"]) && !empty($_POST["pass"])) {
         $pass = md5($_POST["pass"]);
     } else {
         $passErr = "Password is required";
     }
-
     if (isset($_POST["status"]) && in_array($_POST["status"], [1,0])) {
         $status = $_POST["status"];
     } else {
         $statusErr = "Status is required";
     }
 
-    
-
     if (empty($nameErr) &&  empty($passErr) && empty($statusErr)) {
-
         $conn = conn_db();
         $sql = "UPDATE users SET users.user_id = $id, users.username = '{$name}', users.password = '{$pass}', users.role_id = {$role}, users.status = {$status} WHERE user_id = $id";
-
-        // $sql = "UPDATE category SET category.id = $id, category.cate_name = '{$categoryName}', category.parent_id = {$parentId}, category.user = {$user_id}
-        // WHERE id = $id ";
-
-        
-
         if (mysqli_query($conn, $sql)) {
             $last_id = mysqli_insert_id($conn);
             $sql_msg = "Edit user successed <a href='view.php?id={$last_id}' target='_blank' >View</a>";
         } else {
             $sql_msg = "Edit Fail";
         }
-
-        $name   = $pass = $status = "";
+        $name = $pass = $status = "";
         // mysqli_close($conn);
     }
 }

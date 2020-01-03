@@ -42,6 +42,7 @@
             if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
                     mysqli_query($conn, $sql);
                     $last_id = mysqli_insert_id($conn);
+                    header("Location: http://localhost/wint_zoo/admin/page/dashboard.php");
                     $sql_msg = "Add successed <a href='view.php/?id={$last_id}' target='_blank' >View</a>";
                 }
             } else {
@@ -105,18 +106,20 @@
             <div class="container">
                 <form method="post" action="./create.php" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label>Main Category:</label>
-                        <select name="category" required>
-                            <?php
-                            echo "<option value='$id'>Select main category</option>";
-                                while($row = mysqli_fetch_assoc($result)) {
-                                    $id = $row['id'];
-                                    $parent_name = $row['cate_name'];
-                                    echo "<option value='$id'>$parent_name</option>";
-                                }
-                                mysqli_close($conn);
-                            ?>
-                        </select>
+                        <label>Menu</label>
+                        <div>
+                            <select name="category" required>
+                                <?php
+                                echo "<option value='$id'>Select main category</option>";
+                                    while($row = mysqli_fetch_assoc($result)) {
+                                        $id = $row['id'];
+                                        $parent_name = $row['cate_name'];
+                                        echo "<option value='$id'>$parent_name</option>";
+                                    }
+                                    mysqli_close($conn);
+                                ?>
+                            </select>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="my-input">Title</label>

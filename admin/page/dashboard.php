@@ -61,8 +61,8 @@ include('../common/admin-footer.php');
                     <thead>
                         <tr>
                             <th>STT</th>
-                            <th>Title</th>
                             <th>Category</th>
+                            <th>Title</th>
                             <th>Image</th>
                             <th>Datetime</th>
                             <th>User</th>
@@ -72,30 +72,26 @@ include('../common/admin-footer.php');
                     <tbody>
                         <?php
                             $conn = conn_db();
-                            if (!$conn) {
-                                exit ("Fail to connection Database! ". mysqli_connect_error($conn));
-                            }
-                            $sql = "SELECT * FROM content inner join users on content.user_id = users.user_id 
-                                                          inner join img on content.img_id = img.img_id";
-
-                            //mysqli_set_charset($conn, "utf8");
+                            
+                            $sql = "SELECT * FROM content left join users on content.user_id = users.user_id
+                                                          left join category on content.cate_id = category.id WHERE category.parent_id = 0 ORDER BY date_post DESC";
                             $result = mysqli_query($conn, $sql);
                             if (mysqli_num_rows(($result)) > 0) {
                                 $i = 1;
                                 while ($row = mysqli_fetch_assoc($result)) {
-                                ?>
+                        ?>
 
                                 <tr>
                                     <td><?php echo $i++  ?></td>
-                                    <td><?= $row['title'] ?></td>
                                     <td><?= $row['cate_name'] ?></td>
-                                    <td><?= $row['img_url'] ?></td>
+                                    <td><?= $row['title'] ?></td>
+                                    <td><?php echo "<img style='width:120px;' src='../../asset/img/".$row['img_id']."'>"; ?></td>
                                     <td><?= $row['date_post'] ?></td>
                                     <td><?= $row['username'] ?></td>
                                     <td>
-                                        <a href="<?="./view.php?id={$row['user_id']}" ?>" target="_blank"> View </a> ||
-                                        <a href="<?="./edit.php?id={$row['user_id']}" ?>" target="_blank"> Edit </a> ||
-                                        <a href="<?="./delete.php?id={$row['user_id']}" ?>" target="_blank"> Delete </a>
+                                        <a href="<?="./view.php?id={$row['content_id']}" ?>" target="_blank"> View </a> ||
+                                        <a href="<?="./edit.php?id={$row['content_id']}" ?>" target="_blank"> Edit </a> ||
+                                        <a href="<?="./delete.php?id={$row['content_id']}" ?>" target="_blank"> Delete </a>
                                     </td>
                                 </tr>
 
